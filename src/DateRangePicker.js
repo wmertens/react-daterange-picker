@@ -61,7 +61,7 @@ class DateRangePicker extends BemMixin {
     value: CustomPropTypes.momentOrMomentRange,
   };
 
-  static defaultProps = (function() {
+  static defaultProps = (function () {
     let date = new Date();
     let initialDate = new Date(
       date.getFullYear(),
@@ -101,13 +101,8 @@ class DateRangePicker extends BemMixin {
   constructor(props, context) {
     super(props, context);
     let now = new Date();
-    let {
-      initialYear,
-      initialMonth,
-      initialFromValue,
-      initialDate,
-      value,
-    } = props;
+    let {initialYear, initialMonth, initialFromValue, initialDate, value} =
+      props;
     let year = now.getFullYear();
     let month = now.getMonth();
 
@@ -176,7 +171,7 @@ class DateRangePicker extends BemMixin {
     this.setState(updatedState);
   }
 
-  getEnabledRange = props => {
+  getEnabledRange = (props) => {
     let min = props.minimumDate
       ? moment(props.minimumDate).startOf('day')
       : absoluteMinimum;
@@ -187,7 +182,7 @@ class DateRangePicker extends BemMixin {
     return moment.range(min, max);
   };
 
-  getDateStates = props => {
+  getDateStates = (props) => {
     let {defaultState, stateDefinitions} = props;
     let actualStates = [];
     let minDate = absoluteMinimum;
@@ -200,7 +195,7 @@ class DateRangePicker extends BemMixin {
       (a, b) => a.range.start - b.range.start
     );
 
-    dateStates.forEach(function(s) {
+    dateStates.forEach(function (s) {
       let r = s.range;
       let start = r.start.startOf('day');
       let end = r.end.startOf('day');
@@ -221,7 +216,7 @@ class DateRangePicker extends BemMixin {
     });
 
     // sanitize date states
-    return Immutable.List(actualStates).map(function(s) {
+    return Immutable.List(actualStates).map(function (s) {
       let def = defs.get(s.state);
       return Immutable.Map({
         range: s.range,
@@ -234,20 +229,20 @@ class DateRangePicker extends BemMixin {
     });
   };
 
-  isDateDisabled = date => {
+  isDateDisabled = (date) => {
     return !this.state.enabledRange.contains(date);
   };
 
-  isDateSelectable = date => {
-    return this.dateRangesForDate(date).some(r => r.get('selectable'));
+  isDateSelectable = (date) => {
+    return this.dateRangesForDate(date).some((r) => r.get('selectable'));
   };
 
   nonSelectableStateRanges = () => {
-    return this.state.dateStates.filter(d => !d.get('selectable'));
+    return this.state.dateStates.filter((d) => !d.get('selectable'));
   };
 
-  dateRangesForDate = date => {
-    return this.state.dateStates.filter(d => d.get('range').contains(date));
+  dateRangesForDate = (date) => {
+    return this.state.dateStates.filter((d) => d.get('range').contains(date));
   };
 
   sanitizeRange = (range, forwards) => {
@@ -255,18 +250,18 @@ class DateRangePicker extends BemMixin {
      * with a non-selectable state. Using forwards to determine
      * which direction to work
      */
-    let blockedRanges = this.nonSelectableStateRanges().map(r =>
+    let blockedRanges = this.nonSelectableStateRanges().map((r) =>
       r.get('range')
     );
     let intersect;
 
     if (forwards) {
-      intersect = blockedRanges.find(r => range.intersect(r));
+      intersect = blockedRanges.find((r) => range.intersect(r));
       if (intersect) {
         return moment.range(range.start, intersect.start);
       }
     } else {
-      intersect = blockedRanges.findLast(r => range.intersect(r));
+      intersect = blockedRanges.findLast((r) => range.intersect(r));
 
       if (intersect) {
         return moment.range(intersect.end, range.end);
@@ -284,7 +279,7 @@ class DateRangePicker extends BemMixin {
     return range;
   };
 
-  highlightRange = range => {
+  highlightRange = (range) => {
     this.setState({
       highlightedRange: range,
       highlightedDate: null,
@@ -300,7 +295,7 @@ class DateRangePicker extends BemMixin {
     });
   };
 
-  onSelectDate = date => {
+  onSelectDate = (date) => {
     let {selectionType} = this.props;
     let {selectedStartDate} = this.state;
 
@@ -320,7 +315,7 @@ class DateRangePicker extends BemMixin {
     }
   };
 
-  onHighlightDate = date => {
+  onHighlightDate = (date) => {
     let {selectionType} = this.props;
     let {selectedStartDate} = this.state;
 
@@ -330,7 +325,7 @@ class DateRangePicker extends BemMixin {
 
     if (selectionType === 'range') {
       if (selectedStartDate) {
-        datePair = Immutable.List.of(selectedStartDate, date).sortBy(d =>
+        datePair = Immutable.List.of(selectedStartDate, date).sortBy((d) =>
           d.unix()
         );
         range = moment.range(datePair.get(0), datePair.get(1));
@@ -347,7 +342,7 @@ class DateRangePicker extends BemMixin {
     }
   };
 
-  startRangeSelection = date => {
+  startRangeSelection = (date) => {
     this.setState({
       hideSelection: true,
       selectedStartDate: date,
@@ -357,19 +352,19 @@ class DateRangePicker extends BemMixin {
     }
   };
 
-  statesForDate = date => {
+  statesForDate = (date) => {
     return this.state.dateStates
-      .filter(d => date.within(d.get('range')))
-      .map(d => d.get('state'));
+      .filter((d) => date.within(d.get('range')))
+      .map((d) => d.get('state'));
   };
 
-  statesForRange = range => {
+  statesForRange = (range) => {
     if (range.start.isSame(range.end, 'day')) {
       return this.statesForDate(range.start);
     }
     return this.state.dateStates
-      .filter(d => d.get('range').intersect(range))
-      .map(d => d.get('state'));
+      .filter((d) => d.get('range').intersect(range))
+      .map((d) => d.get('state'));
   };
 
   completeSelection = () => {
@@ -400,7 +395,7 @@ class DateRangePicker extends BemMixin {
     }
   };
 
-  highlightDate = date => {
+  highlightDate = (date) => {
     this.setState({
       highlightedDate: date,
     });
@@ -413,12 +408,12 @@ class DateRangePicker extends BemMixin {
     return moment(new Date(this.state.year, this.state.month, 1));
   };
 
-  isStartOrEndVisible = props => {
+  isStartOrEndVisible = (props) => {
     const {value, selectionType, numberOfCalendars} = props;
 
     if (!value) return true;
 
-    const isVisible = date => {
+    const isVisible = (date) => {
       if (!date) return true;
       const yearMonth = getYearMonth(date);
       const isSameYear = yearMonth.year === this.state.year;
@@ -478,7 +473,7 @@ class DateRangePicker extends BemMixin {
     }
   };
 
-  changeYear = year => {
+  changeYear = (year) => {
     let {enabledRange, month} = this.state;
 
     if (
@@ -501,13 +496,24 @@ class DateRangePicker extends BemMixin {
     });
   };
 
-  changeMonth = date => {
+  changeMonth = (date) => {
     this.setState({
       month: date,
     });
   };
 
-  renderCalendar = index => {
+  rangesOverlap = (rangeA, rangeB) => {
+    if (
+      rangeA.overlaps(rangeB) ||
+      rangeA.contains(rangeB.start) ||
+      rangeA.contains(rangeB.end)
+    ) {
+      return true;
+    }
+    return false;
+  };
+
+  renderCalendar = (index) => {
     let {
       bemBlock,
       bemNamespace,
@@ -541,14 +547,10 @@ class DateRangePicker extends BemMixin {
     let monthEnd = monthDates.last().last();
     let monthRange = moment.range(monthStart, monthEnd);
 
-    if (moment.isMoment(value)) {
-      if (!monthRange.contains(value)) {
-        value = null;
-      }
-    } else if (isMomentRange(value)) {
-      if (!monthRange.overlaps(value)) {
-        value = null;
-      }
+    if (moment.isMoment(value) && !monthRange.contains(value)) {
+      value = null;
+    } else if (isMomentRange(value) && !this.rangesOverlap(monthRange, value)) {
+      value = null;
     }
 
     if (
@@ -560,7 +562,7 @@ class DateRangePicker extends BemMixin {
 
     if (
       !isMomentRange(highlightedRange) ||
-      !monthRange.overlaps(highlightedRange)
+      !this.rangesOverlap(monthRange, highlightedRange)
     ) {
       highlightedRange = null;
     }
