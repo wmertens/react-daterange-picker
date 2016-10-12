@@ -576,6 +576,11 @@ var DateRangePicker = _react2['default'].createClass({
       'div',
       { className: className.trim() },
       _react2['default'].createElement(PaginationArrowComponent, { direction: 'previous', onTrigger: this.moveBack, disabled: !this.canMoveBack() }),
+      _react2['default'].createElement(
+        'div',
+        { className: this.cx({ element: 'CalendarYear' }) },
+        this.state.year
+      ),
       calendars.toJS(),
       _react2['default'].createElement(PaginationArrowComponent, { direction: 'next', onTrigger: this.moveForward, disabled: !this.canMoveForward() }),
       helpMessage ? _react2['default'].createElement(
