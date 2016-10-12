@@ -11,7 +11,7 @@ import PureRenderMixin from '../utils/PureRenderMixin';
 
 const lang = moment().localeData();
 
-const WEEKDAYS = Immutable.List(lang._weekdays).zip(Immutable.List(lang._weekdaysShort));
+const WEEKDAYS = Immutable.List(lang._weekdays).zip(Immutable.List(lang._weekdaysMin));
 const MONTHS = Immutable.List(lang._months);
 
 
