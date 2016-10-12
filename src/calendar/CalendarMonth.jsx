@@ -163,7 +163,7 @@ const CalendarMonth = React.createClass({
   renderHeader() {
     return (
       <div className={this.cx({element: 'MonthHeader'})}>
-        {this.renderHeaderMonth()} {this.renderHeaderYear()}
+        {this.renderHeaderMonth()}
       </div>
     );
   },
