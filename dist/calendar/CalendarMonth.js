@@ -235,9 +235,7 @@ var CalendarMonth = _react2['default'].createClass({
     return _react2['default'].createElement(
       'div',
       { className: this.cx({ element: 'MonthHeader' }) },
-      this.renderHeaderMonth(),
-      ' ',
-      this.renderHeaderYear()
+      this.renderHeaderMonth()
     );
   },
 
