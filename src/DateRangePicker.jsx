@@ -52,6 +52,7 @@ const DateRangePicker = React.createClass({
     selectedLabel: React.PropTypes.string,
     selectionType: React.PropTypes.oneOf(['single', 'range']),
     singleDateRange: React.PropTypes.bool,
+    switchDateStep: React.PropTypes.oneOf(['month', 'year']),
     showLegend: React.PropTypes.bool,
     stateDefinitions: React.PropTypes.object,
     value: CustomPropTypes.momentOrMomentRange,
@@ -75,6 +76,7 @@ const DateRangePicker = React.createClass({
       locale: moment().locale(),
       selectionType: 'range',
       singleDateRange: false,
+      switchDateStep: 'month',
       stateDefinitions: {
         '__default': {
           color: null,
@@ -396,11 +398,15 @@ const DateRangePicker = React.createClass({
 
   moveBack() {
     let monthDate;
-
+    const {switchDateStep} = this.props
+    const step = switchDateStep === 'year' ? 12 : 1
     if (this.canMoveBack()) {
       monthDate = this.getMonthDate();
-      monthDate.subtract(1, 'months');
-      this.setState(getYearMonth(monthDate));
+      monthDate.subtract(step, 'months');
+      this.setState({
+        year: monthDate.year(),
+        month: monthDate.month(),
+      });
     }
   },
 
@@ -413,11 +419,15 @@ const DateRangePicker = React.createClass({
 
   moveForward() {
     let monthDate;
-
+    const {switchDateStep} = this.props
+    const step = switchDateStep === 'year' ? 12 : 1
     if (this.canMoveForward()) {
       monthDate = this.getMonthDate();
-      monthDate.add(1, 'months');
-      this.setState(getYearMonth(monthDate));
+      monthDate.add(step, 'months');
+      this.setState({
+        year: monthDate.year(),
+        month: monthDate.month(),
+      });
     }
   },
 
