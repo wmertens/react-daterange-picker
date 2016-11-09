@@ -497,6 +497,7 @@ const DateRangePicker = React.createClass({
       numberOfCalendars,
       selectionType,
       value,
+      onDateRangeClick,
     } = this.props;
 
     let {
@@ -567,6 +568,7 @@ const DateRangePicker = React.createClass({
       dateRangesForDate: this.dateRangesForDate,
       dateComponent: CalendarDate,
       locale: this.props.locale,
+      onDateRangeClick,
     };
 
     return <CalendarMonth {...props} currentYear={this.state.year} />;

@@ -159,6 +159,7 @@ const CalendarDate = React.createClass({
       isHighlightedRangeStart,
       isHighlightedRangeEnd,
       isInHighlightedRange,
+      onDateRangeClick,
     } = this.props;
 
     let bemModifiers = this.getBemModifiers();
@@ -175,6 +176,13 @@ const CalendarDate = React.createClass({
 
     let highlightModifier;
     let selectionModifier;
+
+    let statesJS = states.toJS()[0];
+    let dateState = {
+      status: statesJS.state,
+      startDate: statesJS.range.start,
+      endDate: statesJS.range.end,
+    }
 
     if (isSelectedDate || (isSelectedRangeStart && isSelectedRangeEnd)
         || (isHighlightedRangeStart && isHighlightedRangeEnd)) {
@@ -224,7 +232,12 @@ const CalendarDate = React.createClass({
         onTouchStart={this.touchStart}
         onMouseEnter={this.mouseEnter}
         onMouseLeave={this.mouseLeave}
-        onMouseDown={this.mouseDown}>
+        onMouseDown={this.mouseDown}
+        onClick={() => {if (dateState.status !== 'available') {
+          console.log("test", onDateRangeClick)
+          onDateRangeClick(dateState)
+        }}}
+      >
         {numStates > 1 &&
           <div className={this.cx({element: "HalfDateStates"})}>
             <CalendarDatePeriod period="am" color={amColor} />
