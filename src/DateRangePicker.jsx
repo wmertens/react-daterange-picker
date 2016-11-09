@@ -124,7 +124,7 @@ const DateRangePicker = React.createClass({
     let year = now.getFullYear();
     let month = now.getMonth();
 
-    if (initialYear && initialMonth) {
+    if (initialYear && initialMonth != null) {
       year = initialYear;
       month = initialMonth;
     }
