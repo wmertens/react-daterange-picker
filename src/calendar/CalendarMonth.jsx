@@ -130,8 +130,11 @@ const CalendarMonth = React.createClass({
   },
 
   renderHeaderYear() {
-    let {firstOfMonth} = this.props;
+    let {firstOfMonth, currentYear} = this.props;
     let y = firstOfMonth.year();
+    if (currentYear === y) {
+      return false
+    }
     let years = Immutable.Range(y - 5, y).concat(Immutable.Range(y, y + 10));
     let choices = years.map(this.renderYearChoice);
     let modifiers = {year: true};
