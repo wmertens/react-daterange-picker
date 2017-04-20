@@ -117,10 +117,12 @@ const DateRangePicker = React.createClass({
 
     if (hasUpdatedValue(this.props, nextProps)) {
       const isNewValueVisible = this.isStartOrEndVisible(nextProps);
-      if (!isNewValueVisible && this.props.initialFromValue) {
+      if (isNewValueVisible && this.props.initialFromValue) {
         const yearMonth = getYearMonthProps(nextProps);
-        updatedState.year = yearMonth.year;
-        updatedState.month = yearMonth.month;
+        if (yearMonth) {
+            updatedState.year = yearMonth.year;
+            updatedState.month = yearMonth.month;
+        }
       }
     }
 
@@ -140,8 +142,10 @@ const DateRangePicker = React.createClass({
 
     if (initialFromValue && value) {
       const yearMonth = getYearMonthProps(this.props);
-      month = yearMonth.month;
-      year = yearMonth.year;
+      if (yearMonth) {
+          month = yearMonth.month;
+          year = yearMonth.year;
+      }
     }
 
     return {
@@ -419,10 +423,11 @@ const DateRangePicker = React.createClass({
 
     const isVisible = date => {
       const yearMonth = getYearMonth(date);
-      const isSameYear = yearMonth.year === this.state.year;
-      const isMonthVisible =
-        yearMonth.month === this.state.month ||
-        (numberOfCalendars === 2 && yearMonth.month - 1 === this.state.month);
+      if (!yearMonth) {
+          return false;
+      }
+      const isSameYear = (yearMonth.year === this.state.year);
+      const isMonthVisible = (yearMonth.month === this.state.month) || (numberOfCalendars === 2 && (yearMonth.month - 1 === this.state.month));
 
       return isSameYear && isMonthVisible;
     };
