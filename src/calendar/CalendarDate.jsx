@@ -105,23 +105,24 @@ const CalendarDate = React.createClass({
   },
 
   mouseEnter({ startDate, endDate, status }) {
-    const { date } = this.props;
-    this.props.onHighlightDate(date);
+    const { date, onHighlightDate, onHoverRange } = this.props;
+    onHighlightDate && onHighlightDate(date);
     if (status !== 'available') {
-      this.props.onHoverRange(date, { startDate, endDate });
+      onHoverRange && onHoverRange(date, { startDate, endDate });
     }
   },
 
   mouseLeave(/*{ startDate, endDate }*/) {
+    const { onUnHighlightDate, onUnHoverRange, onSelectDate } = this.props
     if (this.state.mouseDown) {
-      this.props.onSelectDate(this.props.date);
+      onSelectDate && onSelectDate(this.props.date);
 
       this.setState({
         mouseDown: false,
       });
     }
-    this.props.onUnHighlightDate(this.props.date);
-    this.props.onUnHoverRange();
+    onUnHighlightDate && onUnHighlightDate(this.props.date);
+    onUnHoverRange && onUnHoverRange();
   },
 
   getBemModifiers() {
