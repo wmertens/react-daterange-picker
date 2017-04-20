@@ -4,6 +4,7 @@
   "description": "A React based date range picker",
   "author": "Jonathan Kim <jonathan.kim@onefinestay.com>",
   "scripts": {
+    "git-build": "sh git-build.sh",
     "develop": "gulp develop",
     "build-dist-js": "gulp build-dist-js",
     "test": "gulp test-coverage",
