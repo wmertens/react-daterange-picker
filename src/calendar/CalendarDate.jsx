@@ -190,11 +190,11 @@ const CalendarDate = React.createClass({
       endDate: statesJS.range.end,
     };
 
-    if (
-      isSelectedDate ||
-      (isSelectedRangeStart && isSelectedRangeEnd) ||
-      (isHighlightedRangeStart && isHighlightedRangeEnd)
-    ) {
+    if (statesJS.range.id) {
+        dateState.id = statesJS.range.id
+    }
+    if (isSelectedDate || (isSelectedRangeStart && isSelectedRangeEnd)
+        || (isHighlightedRangeStart && isHighlightedRangeEnd)) {
       selectionModifier = 'single';
     } else if (isSelectedRangeStart || isHighlightedRangeStart) {
       selectionModifier = 'start';
@@ -250,17 +250,9 @@ const CalendarDate = React.createClass({
         onMouseEnter={() => this.mouseEnter(dateState)}
         onMouseLeave={() => this.mouseLeave(dateState)}
         onMouseDown={this.mouseDown}
-<<<<<<< ours
-        onClick={() => {
-          if (dateState.status !== 'available') {
-            onDateRangeClick(dateState);
-          }
-        }}
-=======
         onClick={() => {if (dateState.status !== 'available' && onDateRangeClick) {
           onDateRangeClick(dateState)
         }}}
->>>>>>> theirs
       >
         {numStates > 1 &&
           <div className={this.cx({ element: 'HalfDateStates' })}>
