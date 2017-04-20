@@ -97,8 +97,8 @@ describe('The DateRangePicker component', function () {
 
     it('2 of them', function () {
       this.useShallowRenderer();
-      expect(this.renderedComponent.props.children[0].type).toBe(PaginationArrow);
-      expect(this.renderedComponent.props.children[2].type).toBe(PaginationArrow);
+      expect(this.renderedComponent.props.children[0].props.children[0].type).toBe(PaginationArrow);
+      expect(this.renderedComponent.props.children[0].props.children[2].type).toBe(PaginationArrow);
     });
 
     it('the left one gets disabled when we are at the start of the permitted period', function () {
@@ -107,7 +107,7 @@ describe('The DateRangePicker component', function () {
         initialYear: 2000,
         initialMonth: 6,
       });
-      expect(this.renderedComponent.props.children[0].props.disabled).toBe(true);
+      expect(this.renderedComponent.props.children[0].props.children[0].props.disabled).toBe(true);
     });
 
     it('the left one does not get disabled when we are not at the start of the permitted period', function () {
@@ -116,7 +116,7 @@ describe('The DateRangePicker component', function () {
         initialYear: 2000,
         initialMonth: 6,
       });
-      expect(this.renderedComponent.props.children[0].props.disabled).toBe(false);
+      expect(this.renderedComponent.props.children[0].props.disabled).toBe(false || undefined);
     });
 
     it('the left one when clicked moves the calendar one month in the past', function () {
@@ -136,7 +136,7 @@ describe('The DateRangePicker component', function () {
         initialYear: 2000,
         initialMonth: 6,
       });
-      expect(this.renderedComponent.props.children[2].props.disabled).toBe(true);
+      expect(this.renderedComponent.props.children[0].props.children[2].props.disabled).toBe(true);
     });
 
     it('the right one does not get disabled when we are not at the end of the permitted period', function () {
@@ -145,7 +145,7 @@ describe('The DateRangePicker component', function () {
         initialYear: 2000,
         initialMonth: 6,
       });
-      expect(this.renderedComponent.props.children[2].props.disabled).toBe(true);
+      expect(this.renderedComponent.props.children[0].props.children[2].props.disabled).toBe(true);
     });
 
     it('the right one when clicked moves the calendar one month in the future', function () {
@@ -660,7 +660,7 @@ describe('The DateRangePicker component', function () {
       this.useShallowRenderer({
         helpMessage: 'help',
       });
-      var helpSpan = this.renderedComponent.props.children[3];
+      var helpSpan = this.renderedComponent.props.children[2];
       expect(helpSpan.type).toBe('span');
       expect(helpSpan.props).toEqual({
         className: 'DateRangePicker__HelpMessage',
@@ -682,14 +682,14 @@ describe('The DateRangePicker component', function () {
         showLegend: true,
         selectedLabel: 'label',
       });
-      var legendComponent = this.renderedComponent.props.children[4];
+      var legendComponent = this.renderedComponent.props.children[3];
       expect(legendComponent.type).toBe(Legend);
       expect(legendComponent.props.selectedLabel).toBe('label');
     });
 
     it('but not otherwise', function () {
       this.useShallowRenderer();
-      expect(this.renderedComponent.props.children[4]).toBe(null);
+      expect(this.renderedComponent.props.children[4]).toBe(null || undefined);
     });
 
   });
