@@ -5,44 +5,46 @@ import _ from 'underscore';
 import CalendarMonth from '../calendar/CalendarMonth';
 import CalendarDate from '../calendar/CalendarDate';
 
-describe('Localization', function () {
-
+describe('Localization', function() {
   const testLocales = ['en-gb', 'ar', 'fr', 'it', 'es', 'de', 'ru', 'be'];
 
-  beforeEach(function () {
-
-    const getCalendarMonth = (props) => {
-
-      props = _.extend({
-        firstOfWeek: 0,
-        firstOfMonth: this.firstOfMonth,
-        enabledRange: moment.range(moment(), moment().add(3, 'years')),
-        dateComponent: CalendarDate,
-        disableNavigation: false,
-        dateRangesForDate: function () {
-          return {
-            count: function () {
-              return props.count || 1;
-            },
-            getIn: function (data) {
-              if (data[0] === 0) {
-                return '#333';
-              }
-              return '#444';
-            },
-          };
+  beforeEach(function() {
+    const getCalendarMonth = props => {
+      props = _.extend(
+        {
+          firstOfWeek: 0,
+          firstOfMonth: this.firstOfMonth,
+          enabledRange: moment.range(moment(), moment().add(3, 'years')),
+          dateComponent: CalendarDate,
+          disableNavigation: false,
+          dateRangesForDate: function() {
+            return {
+              count: function() {
+                return props.count || 1;
+              },
+              getIn: function(data) {
+                if (data[0] === 0) {
+                  return '#333';
+                }
+                return '#444';
+              },
+            };
+          },
+          onMonthChange: function() {},
+          onYearChange: function() {},
+          bemBlock: 'DateRangePicker',
+          locale: props.locale || 'en',
         },
-        onMonthChange: function () {},
-        onYearChange: function () {},
-        bemBlock: 'DateRangePicker',
-        locale: props.locale || 'en',
-      }, props);
+        props
+      );
 
-
-      return (<CalendarMonth {...props} />);
+      return <CalendarMonth {...props} />;
     };
-
-    this.useShallowRenderer = (props) => {
+    getCalendarMonth.propTypes = {
+      count: React.PropTypes.number,
+      locale: React.PropTypes.string,
+    };
+    this.useShallowRenderer = props => {
       this.shallowRenderer = TestUtils.createRenderer();
       this.shallowRenderer.render(getCalendarMonth(props));
       this.renderedComponent = this.shallowRenderer.getRenderOutput();
@@ -50,22 +52,25 @@ describe('Localization', function () {
       this.table = this.renderedComponent.props.children[1];
     };
 
-    this.useDocumentRenderer = (props) => {
-      this.component = this.renderedComponent = TestUtils.renderIntoDocument(getCalendarMonth(props));
+    this.useDocumentRenderer = props => {
+      this.component = this.renderedComponent = TestUtils.renderIntoDocument(
+        getCalendarMonth(props)
+      );
     };
 
     this.firstOfMonth = moment();
   });
 
-  afterEach( function () {
+  afterEach(function() {
     if (this.component) {
-      React.unmountComponentAtNode(React.findDOMNode(this.component).parentNode);
+      React.unmountComponentAtNode(
+        React.findDOMNode(this.component).parentNode
+      );
     }
   });
 
-
-  it('renders the proper month header', function () {
-    testLocales.forEach((currLocale) => {
+  it('renders the proper month header', function() {
+    testLocales.forEach(currLocale => {
       require(`moment/locale/${currLocale}`);
       moment.locale(currLocale);
       this.useShallowRenderer({
@@ -73,15 +78,16 @@ describe('Localization', function () {
       });
 
       const currentMonth = moment().format('MMMM');
-      const headerMonthLabel = this.container.props.children[0].props.children[0];
+      const headerMonthLabel = this.container.props.children[0].props.children[
+        0
+      ];
 
       expect(headerMonthLabel).toEqual(currentMonth);
     });
   });
 
-
-  it('renders the proper month options', function () {
-    testLocales.forEach((currLocale) => {
+  it('renders the proper month options', function() {
+    testLocales.forEach(currLocale => {
       require(`moment/locale/${currLocale}`);
       moment.locale(currLocale);
       this.useShallowRenderer({
@@ -89,7 +95,9 @@ describe('Localization', function () {
       });
 
       const months = moment.months();
-      const headerMonthSelect = this.container.props.children[0].props.children[1];
+      const headerMonthSelect = this.container.props.children[0].props.children[
+        1
+      ];
 
       headerMonthSelect.props.children.map((option, index) => {
         const optionText = option.props.children;
@@ -98,9 +106,8 @@ describe('Localization', function () {
     });
   });
 
-
   it('renders the proper year header', function() {
-    testLocales.forEach((currLocale) => {
+    testLocales.forEach(currLocale => {
       require(`moment/locale/${currLocale}`);
       moment.locale(currLocale);
       this.useShallowRenderer({
@@ -108,25 +115,28 @@ describe('Localization', function () {
       });
 
       const currentYear = moment().format('YYYY');
-      const headerYearLabel = this.container.props.children[2].props.children[0];
+      const headerYearLabel = this.container.props.children[2].props.children[
+        0
+      ];
 
       expect(headerYearLabel).toEqual(currentYear);
     });
   });
 
-
-  it('renders the proper year options', function () {
-    testLocales.forEach((currLocale) => {
+  it('renders the proper year options', function() {
+    testLocales.forEach(currLocale => {
       require(`moment/locale/${currLocale}`);
       moment.locale(currLocale);
       this.useShallowRenderer({
         locale: currLocale,
       });
 
-      const years = _.map(_.range(0, 4), (val) => {
+      const years = _.map(_.range(0, 4), val => {
         return moment().add(val, 'y').format('YYYY');
       });
-      const headerYearSelect = this.container.props.children[2].props.children[1];
+      const headerYearSelect = this.container.props.children[2].props.children[
+        1
+      ];
 
       _.map(_.compact(headerYearSelect.props.children), (option, index) => {
         const optionText = option.props.children;

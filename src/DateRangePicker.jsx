@@ -44,6 +44,7 @@ const DateRangePicker = React.createClass({
     maximumDate: React.PropTypes.instanceOf(Date),
     minimumDate: React.PropTypes.instanceOf(Date),
     numberOfCalendars: React.PropTypes.number,
+    onDateRangeClick: React.PropTypes.func, // triggered when a range is clicked
     onHighlightDate: React.PropTypes.func, // triggered when a date is highlighted (hovered)
     onHighlightRange: React.PropTypes.func, // triggered when a range is highlighted (hovered)
     onSelect: React.PropTypes.func, // triggered when a date or range is selectec
@@ -120,8 +121,8 @@ const DateRangePicker = React.createClass({
       if (isNewValueVisible && this.props.initialFromValue) {
         const yearMonth = getYearMonthProps(nextProps);
         if (yearMonth) {
-            updatedState.year = yearMonth.year;
-            updatedState.month = yearMonth.month;
+          updatedState.year = yearMonth.year;
+          updatedState.month = yearMonth.month;
         }
       }
     }
@@ -143,8 +144,8 @@ const DateRangePicker = React.createClass({
     if (initialFromValue && value) {
       const yearMonth = getYearMonthProps(this.props);
       if (yearMonth) {
-          month = yearMonth.month;
-          year = yearMonth.year;
+        month = yearMonth.month;
+        year = yearMonth.year;
       }
     }
 
@@ -181,14 +182,16 @@ const DateRangePicker = React.createClass({
 
     let defs = Immutable.fromJS(stateDefinitions);
 
-    function compareRanges(a,b) {
-			if (a.range.start._d < b.range.start._d)
-				return -1;
-			if (a.range.start._d > b.range.start._d)
-				return 1;
-			return 0;
-		}
-		dateStates.sort(compareRanges)
+    function compareRanges(a, b) {
+      if (a.range.start._d < b.range.start._d) {
+        return -1;
+      }
+      if (a.range.start._d > b.range.start._d) {
+        return 1;
+      }
+      return 0;
+    }
+    dateStates.sort(compareRanges);
 
     dateStates.forEach(function(s) {
       let r = s.range;
@@ -290,15 +293,15 @@ const DateRangePicker = React.createClass({
   },
 
   hoverRange(range) {
-      this.setState({
-          hoveredRange: range,
-      })
+    this.setState({
+      hoveredRange: range,
+    });
   },
 
   onUnHoverRange() {
-      this.setState({
-        hoveredRange: null,
-      });
+    this.setState({
+      hoveredRange: null,
+    });
   },
 
   onSelectDate(date) {
@@ -324,8 +327,8 @@ const DateRangePicker = React.createClass({
   },
 
   onHighlightDate(date) {
-    let {selectionType} = this.props;
-    let {selectedStartDate} = this.state;
+    let { selectionType } = this.props;
+    let { selectedStartDate } = this.state;
     let datePair;
     let range;
     let forwards;
@@ -424,10 +427,12 @@ const DateRangePicker = React.createClass({
     const isVisible = date => {
       const yearMonth = getYearMonth(date);
       if (!yearMonth) {
-          return false;
+        return false;
       }
-      const isSameYear = (yearMonth.year === this.state.year);
-      const isMonthVisible = (yearMonth.month === this.state.month) || (numberOfCalendars === 2 && (yearMonth.month - 1 === this.state.month));
+      const isSameYear = yearMonth.year === this.state.year;
+      const isMonthVisible =
+        yearMonth.month === this.state.month ||
+        (numberOfCalendars === 2 && yearMonth.month - 1 === this.state.month);
 
       return isSameYear && isMonthVisible;
     };

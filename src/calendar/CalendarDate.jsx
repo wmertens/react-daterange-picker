@@ -28,6 +28,7 @@ const CalendarDate = React.createClass({
     isHighlightedRangeStart: React.PropTypes.bool,
     isHighlightedRangeEnd: React.PropTypes.bool,
     isInHighlightedRange: React.PropTypes.bool,
+    isInHoveredRange: React.PropTypes.bool,
 
     highlightedDate: React.PropTypes.object,
     dateStates: React.PropTypes.instanceOf(Immutable.List),
@@ -35,8 +36,11 @@ const CalendarDate = React.createClass({
     isToday: React.PropTypes.bool,
 
     dateRangesForDate: React.PropTypes.func,
+    onDateRangeClick: React.PropTypes.func,
     onHighlightDate: React.PropTypes.func,
+    onHoverRange: React.PropTypes.func,
     onUnHighlightDate: React.PropTypes.func,
+    onUnHoverRange: React.PropTypes.func,
     onSelectDate: React.PropTypes.func,
   },
 
@@ -100,15 +104,15 @@ const CalendarDate = React.createClass({
     document.addEventListener('touchend', this.touchEnd);
   },
 
-  mouseEnter({startDate, endDate, status}) {
-    const {date} = this.props
+  mouseEnter({ startDate, endDate, status }) {
+    const { date } = this.props;
     this.props.onHighlightDate(date);
     if (status !== 'available') {
-        this.props.onHoverRange(date, {startDate, endDate});
+      this.props.onHoverRange(date, { startDate, endDate });
     }
   },
 
-  mouseLeave() {
+  mouseLeave(/*{ startDate, endDate }*/) {
     if (this.state.mouseDown) {
       this.props.onSelectDate(this.props.date);
 
@@ -172,14 +176,12 @@ const CalendarDate = React.createClass({
     let pending = isInHighlightedRange;
 
     let color;
-    let hover;
     let amColor;
     let pmColor;
     let states = dateRangesForDate(date);
     let numStates = states.count();
     let cellStyle = {};
     let style = {};
-    let hoverStyle;
 
     let highlightModifier;
     let selectionModifier;
@@ -191,10 +193,13 @@ const CalendarDate = React.createClass({
     };
 
     if (statesJS.range.id) {
-        dateState.id = statesJS.range.id
+      dateState.id = statesJS.range.id;
     }
-    if (isSelectedDate || (isSelectedRangeStart && isSelectedRangeEnd)
-        || (isHighlightedRangeStart && isHighlightedRangeEnd)) {
+    if (
+      isSelectedDate ||
+      (isSelectedRangeStart && isSelectedRangeEnd) ||
+      (isHighlightedRangeStart && isHighlightedRangeEnd)
+    ) {
       selectionModifier = 'single';
     } else if (isSelectedRangeStart || isHighlightedRangeStart) {
       selectionModifier = 'start';
@@ -210,7 +215,9 @@ const CalendarDate = React.createClass({
 
     if (numStates === 1) {
       // If there's only one state, it means we're not at a boundary
-      color = isInHoveredRange ? states.getIn([0, 'hover']) : states.getIn([0, 'color']);
+      color = isInHoveredRange
+        ? states.getIn([0, 'hover'])
+        : states.getIn([0, 'color']);
       if (color) {
         style = {
           backgroundColor: color,
@@ -220,14 +227,13 @@ const CalendarDate = React.createClass({
           borderRightColor: lightenDarkenColor(color, -10),
         };
       }
-      if(hover) {
-          hoverStyle = {
-              backgroundColor: hover || 'initial'
-          };
-      }
     } else {
-      amColor = isInHoveredRange ? states.getIn([0, 'hover']) : states.getIn([0, 'color']);
-      pmColor = isInHoveredRange ? states.getIn([1, 'hover']) : states.getIn([1, 'color']);
+      amColor = isInHoveredRange
+        ? states.getIn([0, 'hover'])
+        : states.getIn([0, 'color']);
+      pmColor = isInHoveredRange
+        ? states.getIn([1, 'hover'])
+        : states.getIn([1, 'color']);
 
       if (amColor) {
         cellStyle.borderLeftColor = lightenDarkenColor(amColor, -10);
@@ -250,9 +256,11 @@ const CalendarDate = React.createClass({
         onMouseEnter={() => this.mouseEnter(dateState)}
         onMouseLeave={() => this.mouseLeave(dateState)}
         onMouseDown={this.mouseDown}
-        onClick={() => {if (dateState.status !== 'available' && onDateRangeClick) {
-          onDateRangeClick(dateState)
-        }}}
+        onClick={() => {
+          if (dateState.status !== 'available' && onDateRangeClick) {
+            onDateRangeClick(dateState);
+          }
+        }}
       >
         {numStates > 1 &&
           <div className={this.cx({ element: 'HalfDateStates' })}>
