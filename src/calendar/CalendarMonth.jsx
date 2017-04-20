@@ -10,9 +10,10 @@ import PureRenderMixin from '../utils/PureRenderMixin';
 
 const lang = moment().localeData();
 
-const WEEKDAYS = Immutable.List(lang._weekdays).zip(Immutable.List(lang._weekdaysMin));
+const WEEKDAYS = Immutable.List(lang._weekdays).zip(
+  Immutable.List(lang._weekdaysMin)
+);
 const MONTHS = Immutable.List(lang._months);
-
 
 const CalendarMonth = React.createClass({
   mixins: [BemMixin, PureRenderMixin],
@@ -34,7 +35,9 @@ const CalendarMonth = React.createClass({
 
   setLocale(locale) {
     moment.locale(locale);
-    this.WEEKDAYS = Immutable.List(moment.weekdays()).zip(Immutable.List(moment.weekdaysShort()));
+    this.WEEKDAYS = Immutable.List(moment.weekdays()).zip(
+      Immutable.List(moment.weekdaysShort())
+    );
     this.MONTHS = Immutable.List(moment.months());
   },
 
@@ -51,7 +54,15 @@ const CalendarMonth = React.createClass({
   },
 
   renderDay(date, i) {
-    let {dateComponent: CalendarDate, value, highlightedDate, highlightedRange, hideSelection, enabledRange, ...props} = this.props;
+    let {
+      dateComponent: CalendarDate,
+      value,
+      highlightedDate,
+      highlightedRange,
+      hideSelection,
+      enabledRange,
+      ...props
+    } = this.props;
     let d = moment(date).locale(this.props.locale);
 
     let isInSelectedRange;
@@ -59,9 +70,16 @@ const CalendarMonth = React.createClass({
     let isSelectedRangeStart;
     let isSelectedRangeEnd;
 
-    if (!hideSelection && value && moment.isMoment(value) && value.isSame(d, 'day')) {
+    if (
+      !hideSelection &&
+      value &&
+      moment.isMoment(value) &&
+      value.isSame(d, 'day')
+    ) {
       isSelectedDate = true;
-    } else if (!hideSelection && value && isMomentRange(value) && value.contains(d)) {
+    } else if (
+      !hideSelection && value && isMomentRange(value) && value.contains(d)
+    ) {
       isInSelectedRange = true;
 
       isSelectedRangeStart = value.start.isSame(d, 'day');
@@ -73,39 +91,58 @@ const CalendarMonth = React.createClass({
         key={i}
         isToday={d.isSame(moment(), 'day')}
         isDisabled={!enabledRange.contains(d)}
-        isHighlightedDate={!!(highlightedDate && highlightedDate.isSame(d, 'day'))}
-        isHighlightedRangeStart={!!(highlightedRange && highlightedRange.start.isSame(d, 'day'))}
-        isHighlightedRangeEnd={!!(highlightedRange && highlightedRange.end.isSame(d, 'day'))}
-        isInHighlightedRange={!!(highlightedRange && highlightedRange.contains(d))}
+        isHighlightedDate={
+          !!(highlightedDate && highlightedDate.isSame(d, 'day'))
+        }
+        isHighlightedRangeStart={
+          !!(highlightedRange && highlightedRange.start.isSame(d, 'day'))
+        }
+        isHighlightedRangeEnd={
+          !!(highlightedRange && highlightedRange.end.isSame(d, 'day'))
+        }
+        isInHighlightedRange={
+          !!(highlightedRange && highlightedRange.contains(d))
+        }
         isSelectedDate={isSelectedDate}
         isSelectedRangeStart={isSelectedRangeStart}
         isSelectedRangeEnd={isSelectedRangeEnd}
         isInSelectedRange={isInSelectedRange}
         date={d}
-        {...props} />
+        {...props}
+      />
     );
   },
 
   renderWeek(dates, i) {
     let days = dates.map(this.renderDay);
     return (
-      <tr className={this.cx({element: 'Week'})} key={i}>{days.toJS()}</tr>
+      <tr className={this.cx({ element: 'Week' })} key={i}>{days.toJS()}</tr>
     );
   },
 
   renderDayHeaders() {
-    let {firstOfWeek} = this.props;
-    let indices = Immutable.Range(firstOfWeek, 7).concat(Immutable.Range(0, firstOfWeek));
+    let { firstOfWeek } = this.props;
+    let indices = Immutable.Range(firstOfWeek, 7).concat(
+      Immutable.Range(0, firstOfWeek)
+    );
 
-    let headers = indices.map(function(index) {
-      let weekday = this.WEEKDAYS.get(index);
-      return (
-        <th className={this.cx({element: 'WeekdayHeading'})} key={weekday} scope="col"><abbr title={weekday[0]}>{weekday[1]}</abbr></th>
-      );
-    }.bind(this));
+    let headers = indices.map(
+      function(index) {
+        let weekday = this.WEEKDAYS.get(index);
+        return (
+          <th
+            className={this.cx({ element: 'WeekdayHeading' })}
+            key={weekday}
+            scope="col"
+          >
+            <abbr title={weekday[0]}>{weekday[1]}</abbr>
+          </th>
+        );
+      }.bind(this)
+    );
 
     return (
-      <tr className={this.cx({element: 'Weekdays'})}>{headers.toJS()}</tr>
+      <tr className={this.cx({ element: 'Weekdays' })}>{headers.toJS()}</tr>
     );
   },
 
@@ -114,7 +151,7 @@ const CalendarMonth = React.createClass({
   },
 
   renderYearChoice(year) {
-    let {enabledRange} = this.props;
+    let { enabledRange } = this.props;
 
     if (year < enabledRange.start.year()) {
       return null;
@@ -125,23 +162,33 @@ const CalendarMonth = React.createClass({
     }
 
     return (
-      <option key={year} value={year}>{moment(year, 'YYYY').locale(this.props.locale).format('YYYY')}</option>
+      <option key={year} value={year}>
+        {moment(year, 'YYYY').locale(this.props.locale).format('YYYY')}
+      </option>
     );
   },
 
   renderHeaderYear() {
-    let {firstOfMonth, currentYear} = this.props;
+    let { firstOfMonth, currentYear } = this.props;
     let y = firstOfMonth.year();
     if (currentYear === y) {
-      return false
+      return false;
     }
     let years = Immutable.Range(y - 5, y).concat(Immutable.Range(y, y + 10));
     let choices = years.map(this.renderYearChoice);
-    let modifiers = {year: true};
+    let modifiers = { year: true };
     return (
-      <span className={this.cx({element: 'MonthHeaderLabel', modifiers})}>
+      <span className={this.cx({ element: 'MonthHeaderLabel', modifiers })}>
         {firstOfMonth.locale(this.props.locale).format('YYYY')}
-        {this.props.disableNavigation ? null : <select className={this.cx({element: 'MonthHeaderSelect'})} value={y} onChange={this.handleYearChange}>{choices.toJS()}</select>}
+        {this.props.disableNavigation
+          ? null
+          : <select
+              className={this.cx({ element: 'MonthHeaderSelect' })}
+              value={y}
+              onChange={this.handleYearChange}
+            >
+              {choices.toJS()}
+            </select>}
       </span>
     );
   },
@@ -151,55 +198,73 @@ const CalendarMonth = React.createClass({
   },
 
   renderMonthChoice(month, i) {
-    let {firstOfMonth, enabledRange} = this.props;
+    let { firstOfMonth, enabledRange } = this.props;
     let disabled = false;
     let year = firstOfMonth.year();
 
-    if (moment({years: year, months: i + 1, date: 1}).unix() < enabledRange.start.unix()) {
+    if (
+      moment({ years: year, months: i + 1, date: 1 }).unix() <
+      enabledRange.start.unix()
+    ) {
       disabled = true;
     }
 
-    if (moment({years: year, months: i, date: 1}).unix() > enabledRange.end.unix()) {
+    if (
+      moment({ years: year, months: i, date: 1 }).unix() >
+      enabledRange.end.unix()
+    ) {
       disabled = true;
     }
 
     return (
-      <option key={month} value={i} disabled={disabled ? 'disabled' : null}>{month}</option>
+      <option key={month} value={i} disabled={disabled ? 'disabled' : null}>
+        {month}
+      </option>
     );
   },
 
   renderHeaderMonth() {
-    let {firstOfMonth} = this.props;
+    let { firstOfMonth } = this.props;
     let choices = this.MONTHS.map(this.renderMonthChoice);
-    let modifiers = {month: true};
+    let modifiers = { month: true };
 
     return (
-      <span className={this.cx({element: 'MonthHeaderLabel', modifiers})}>
+      <span className={this.cx({ element: 'MonthHeaderLabel', modifiers })}>
         {firstOfMonth.locale(this.props.locale).format('MMMM')}
-        {this.props.disableNavigation ? null : <select className={this.cx({element: 'MonthHeaderSelect'})} value={firstOfMonth.month()} onChange={this.handleMonthChange}>{choices.toJS()}</select>}
+        {this.props.disableNavigation
+          ? null
+          : <select
+              className={this.cx({ element: 'MonthHeaderSelect' })}
+              value={firstOfMonth.month()}
+              onChange={this.handleMonthChange}
+            >
+              {choices.toJS()}
+            </select>}
       </span>
     );
   },
 
   renderHeader() {
     return (
-      <div className={this.cx({element: 'MonthHeader'})}>
+      <div className={this.cx({ element: 'MonthHeader' })}>
         {this.renderHeaderMonth()} {this.renderHeaderYear()}
       </div>
     );
   },
 
   render() {
-    let {firstOfWeek, firstOfMonth} = this.props;
+    let { firstOfWeek, firstOfMonth } = this.props;
 
     let cal = new calendar.Calendar(firstOfWeek);
-    let monthDates = Immutable.fromJS(cal.monthDates(firstOfMonth.year(), firstOfMonth.month()));
+    let monthDates = Immutable.fromJS(
+      cal.monthDates(firstOfMonth.year(), firstOfMonth.month())
+    );
     let weeks = monthDates.map(this.renderWeek);
 
     return (
-      <div className={this.cx({element: 'Month'})}>
+      <div className={this.cx({ element: 'Month' })}>
         {this.renderHeader()}
-        <table className={this.cx({element: 'MonthDates'})}>
+        <table className={this.cx({ element: 'MonthDates' })}>
           <thead>
             {this.renderDayHeaders()}
           </thead>
