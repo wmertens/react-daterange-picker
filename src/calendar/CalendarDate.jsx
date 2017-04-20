@@ -11,7 +11,6 @@ import CalendarDatePeriod from './CalendarDatePeriod';
 import CalendarHighlight from './CalendarHighlight';
 import CalendarSelection from './CalendarSelection';
 
-
 const CalendarDate = React.createClass({
   mixins: [BemMixin, PureRenderMixin],
 
@@ -117,7 +116,7 @@ const CalendarDate = React.createClass({
   },
 
   getBemModifiers() {
-    let {date, firstOfMonth, isToday: today} = this.props;
+    let { date, firstOfMonth, isToday: today } = this.props;
 
     let otherMonth = false;
     let weekend = false;
@@ -130,7 +129,7 @@ const CalendarDate = React.createClass({
       weekend = true;
     }
 
-    return {today, weekend, otherMonth};
+    return { today, weekend, otherMonth };
   },
 
   getBemStates() {
@@ -144,7 +143,7 @@ const CalendarDate = React.createClass({
 
     let selected = isSelectedDate || isInSelectedRange || isInHighlightedRange;
 
-    return {disabled, highlighted, selected};
+    return { disabled, highlighted, selected };
   },
 
   render() {
@@ -176,16 +175,18 @@ const CalendarDate = React.createClass({
 
     let highlightModifier;
     let selectionModifier;
-
     let statesJS = states.toJS()[0];
     let dateState = {
       status: statesJS.state,
       startDate: statesJS.range.start,
       endDate: statesJS.range.end,
-    }
+    };
 
-    if (isSelectedDate || (isSelectedRangeStart && isSelectedRangeEnd)
-        || (isHighlightedRangeStart && isHighlightedRangeEnd)) {
+    if (
+      isSelectedDate ||
+      (isSelectedRangeStart && isSelectedRangeEnd) ||
+      (isHighlightedRangeStart && isHighlightedRangeEnd)
+    ) {
       selectionModifier = 'single';
     } else if (isSelectedRangeStart || isHighlightedRangeStart) {
       selectionModifier = 'start';
@@ -204,7 +205,6 @@ const CalendarDate = React.createClass({
       color = states.getIn([0, 'color']);
 
       if (color) {
-
         style = {
           backgroundColor: color,
         };
@@ -227,27 +227,42 @@ const CalendarDate = React.createClass({
     }
 
     return (
-      <td className={this.cx({element: 'Date', modifiers: bemModifiers, states: bemStates})}
+      <td
+        className={this.cx({
+          element: 'Date',
+          modifiers: bemModifiers,
+          states: bemStates,
+        })}
         style={cellStyle}
         onTouchStart={this.touchStart}
         onMouseEnter={this.mouseEnter}
         onMouseLeave={this.mouseLeave}
         onMouseDown={this.mouseDown}
-        onClick={() => {if (dateState.status !== 'available') {
-          console.log("test", onDateRangeClick)
-          onDateRangeClick(dateState)
-        }}}
+        onClick={() => {
+          if (dateState.status !== 'available') {
+            onDateRangeClick(dateState);
+          }
+        }}
       >
         {numStates > 1 &&
-          <div className={this.cx({element: "HalfDateStates"})}>
+          <div className={this.cx({ element: 'HalfDateStates' })}>
             <CalendarDatePeriod period="am" color={amColor} />
             <CalendarDatePeriod period="pm" color={pmColor} />
           </div>}
         {numStates === 1 &&
-          <div className={this.cx({element: "FullDateStates"})} style={style} />}
-        <span className={this.cx({element: "DateLabel"})}>{date.format('D')}</span>
-        {selectionModifier ? <CalendarSelection modifier={selectionModifier} pending={pending} /> : null}
-        {highlightModifier ? <CalendarHighlight modifier={highlightModifier} /> : null}
+          <div
+            className={this.cx({ element: 'FullDateStates' })}
+            style={style}
+          />}
+        <span className={this.cx({ element: 'DateLabel' })}>
+          {date.format('D')}
+        </span>
+        {selectionModifier
+          ? <CalendarSelection modifier={selectionModifier} pending={pending} />
+          : null}
+        {highlightModifier
+          ? <CalendarHighlight modifier={highlightModifier} />
+          : null}
       </td>
     );
   },

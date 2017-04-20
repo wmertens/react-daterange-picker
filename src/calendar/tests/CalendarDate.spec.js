@@ -32,6 +32,12 @@ describe('The CalendarDate Component', function () {
               }
               return '#444';
             },
+            toJS: function () {
+              return [{
+                state: 'unavailable',
+                range: moment.range({start: "2014-01-01T12:00:00Z", end: "2014-02-01T12:00:00Z"})
+              }]
+            },
           };
         },
         onSelectDate: this.selectDateSpy,
