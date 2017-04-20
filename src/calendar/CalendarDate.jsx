@@ -100,8 +100,12 @@ const CalendarDate = React.createClass({
     document.addEventListener('touchend', this.touchEnd);
   },
 
-  mouseEnter() {
-    this.props.onHighlightDate(this.props.date);
+  mouseEnter({startDate, endDate, status}) {
+    const {date} = this.props
+    this.props.onHighlightDate(date);
+    if (status !== 'available') {
+        this.props.onHoverRange(date, {startDate, endDate});
+    }
   },
 
   mouseLeave() {
@@ -113,6 +117,7 @@ const CalendarDate = React.createClass({
       });
     }
     this.props.onUnHighlightDate(this.props.date);
+    this.props.onUnHoverRange();
   },
 
   getBemModifiers() {
@@ -158,6 +163,7 @@ const CalendarDate = React.createClass({
       isHighlightedRangeStart,
       isHighlightedRangeEnd,
       isInHighlightedRange,
+      isInHoveredRange,
       onDateRangeClick,
     } = this.props;
 
@@ -166,12 +172,14 @@ const CalendarDate = React.createClass({
     let pending = isInHighlightedRange;
 
     let color;
+    let hover;
     let amColor;
     let pmColor;
     let states = dateRangesForDate(date);
     let numStates = states.count();
     let cellStyle = {};
     let style = {};
+    let hoverStyle;
 
     let highlightModifier;
     let selectionModifier;
@@ -202,8 +210,7 @@ const CalendarDate = React.createClass({
 
     if (numStates === 1) {
       // If there's only one state, it means we're not at a boundary
-      color = states.getIn([0, 'color']);
-
+      color = isInHoveredRange ? states.getIn([0, 'hover']) : states.getIn([0, 'color']);
       if (color) {
         style = {
           backgroundColor: color,
@@ -213,9 +220,14 @@ const CalendarDate = React.createClass({
           borderRightColor: lightenDarkenColor(color, -10),
         };
       }
+      if(hover) {
+          hoverStyle = {
+              backgroundColor: hover || 'initial'
+          };
+      }
     } else {
-      amColor = states.getIn([0, 'color']);
-      pmColor = states.getIn([1, 'color']);
+      amColor = isInHoveredRange ? states.getIn([0, 'hover']) : states.getIn([0, 'color']);
+      pmColor = isInHoveredRange ? states.getIn([1, 'hover']) : states.getIn([1, 'color']);
 
       if (amColor) {
         cellStyle.borderLeftColor = lightenDarkenColor(amColor, -10);
@@ -235,14 +247,20 @@ const CalendarDate = React.createClass({
         })}
         style={cellStyle}
         onTouchStart={this.touchStart}
-        onMouseEnter={this.mouseEnter}
-        onMouseLeave={this.mouseLeave}
+        onMouseEnter={() => this.mouseEnter(dateState)}
+        onMouseLeave={() => this.mouseLeave(dateState)}
         onMouseDown={this.mouseDown}
+<<<<<<< ours
         onClick={() => {
           if (dateState.status !== 'available') {
             onDateRangeClick(dateState);
           }
         }}
+=======
+        onClick={() => {if (dateState.status !== 'available' && onDateRangeClick) {
+          onDateRangeClick(dateState)
+        }}}
+>>>>>>> theirs
       >
         {numStates > 1 &&
           <div className={this.cx({ element: 'HalfDateStates' })}>

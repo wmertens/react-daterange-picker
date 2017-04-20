@@ -59,6 +59,7 @@ const CalendarMonth = React.createClass({
       value,
       highlightedDate,
       highlightedRange,
+      hoveredRange,
       hideSelection,
       enabledRange,
       ...props
@@ -102,6 +103,9 @@ const CalendarMonth = React.createClass({
         }
         isInHighlightedRange={
           !!(highlightedRange && highlightedRange.contains(d))
+        }
+        isInHoveredRange={
+          !!(hoveredRange && hoveredRange.contains(d))
         }
         isSelectedDate={isSelectedDate}
         isSelectedRangeStart={isSelectedRangeStart}
