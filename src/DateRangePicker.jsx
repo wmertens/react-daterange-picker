@@ -104,8 +104,9 @@ const DateRangePicker = React.createClass({
     const nextEnabledRange = this.getEnabledRange(nextProps);
 
     const updatedState = {
-      selectedStartDate: null,
-      hideSelection: false,
+      // Do not reset selection if props change during selection
+      // selectedStartDate: null,
+      // hideSelection: false,
       dateStates: this.state.dateStates &&
         Immutable.is(this.state.dateStates, nextDateStates)
         ? this.state.dateStates
