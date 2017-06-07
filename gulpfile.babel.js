@@ -125,7 +125,7 @@ gulp.task('build-dist-scss', function() {
 });
 
 gulp.task('build-dist', function(callback) {
-  runSequence('lint', 'clean-dist', ['build-dist-js', 'build-dist-scss'], callback);
+  runSequence('clean-dist', ['build-dist-js', 'build-dist-scss'], callback);
 });
 
 gulp.task('build-example-js', function() {
