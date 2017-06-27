@@ -45,6 +45,7 @@ const DateRangePicker = React.createClass({
     minimumDate: React.PropTypes.instanceOf(Date),
     numberOfCalendars: React.PropTypes.number,
     onDateRangeClick: React.PropTypes.func, // triggered when a range is clicked
+    noHover: React.PropTypes.bool,
     onHighlightDate: React.PropTypes.func, // triggered when a date is highlighted (hovered)
     onHighlightRange: React.PropTypes.func, // triggered when a range is highlighted (hovered)
     onSelect: React.PropTypes.func, // triggered when a date or range is selectec
@@ -529,6 +530,7 @@ const DateRangePicker = React.createClass({
       selectionType,
       value,
       onDateRangeClick,
+      noHover,
     } = this.props;
 
     let {
@@ -604,6 +606,7 @@ const DateRangePicker = React.createClass({
       dateComponent: CalendarDate,
       locale: this.props.locale,
       onDateRangeClick,
+      noHover,
     };
 
     return <CalendarMonth {...props} currentYear={this.state.year} />;
