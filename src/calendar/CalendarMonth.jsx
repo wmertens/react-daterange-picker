@@ -32,6 +32,7 @@ const CalendarMonth = React.createClass({
     onYearChange: React.PropTypes.func,
     value: CustomPropTypes.momentOrMomentRange,
     locale: React.PropTypes.string,
+    noHover: React.PropTypes.bool,
   },
 
   setLocale(locale) {
@@ -258,7 +259,7 @@ const CalendarMonth = React.createClass({
   },
 
   render() {
-    let { firstOfWeek, firstOfMonth } = this.props;
+    let { firstOfWeek, firstOfMonth, noHover } = this.props;
 
     let cal = new calendar.Calendar(firstOfWeek);
     let monthDates = Immutable.fromJS(
@@ -269,7 +270,7 @@ const CalendarMonth = React.createClass({
     return (
       <div className={this.cx({ element: 'Month' })}>
         {this.renderHeader()}
-        <table className={this.cx({ element: 'MonthDates' })}>
+        <table className={this.cx({ element: 'MonthDates', modifiers: {noHover}})}>
           <thead>
             {this.renderDayHeaders()}
           </thead>

@@ -140,6 +140,10 @@ $ns: DateRangePicker !default;
     border-spacing: 0 1px;
     margin: 0;
     width: 100%;
+    
+    &--noHover {
+      pointer-events: none;
+    }
   }
 
   &__WeekdayHeading,
