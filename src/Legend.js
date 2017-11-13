@@ -1,17 +1,20 @@
 import React from 'react';
+import shallowCompare from 'react-addons-shallow-compare';
+import PropTypes from 'prop-types';
 
 import BemMixin from './utils/BemMixin';
 
-import PureRenderMixin from 'react-addons-pure-render-mixin';
+class Legend extends BemMixin {
+  static displayName = 'Legend';
 
+  static propTypes = {
+    selectedLabel: PropTypes.string.isRequired,
+    stateDefinitions: PropTypes.object.isRequired,
+  };
 
-const Legend = React.createClass({
-  mixins: [BemMixin, PureRenderMixin],
-
-  propTypes: {
-    selectedLabel: React.PropTypes.string.isRequired,
-    stateDefinitions: React.PropTypes.object.isRequired,
-  },
+  shouldComponentUpdate(nextProps, nextState) {
+    return shallowCompare(this, nextProps, nextState);
+  }
 
   render() {
     let {selectedLabel, stateDefinitions} = this.props;
@@ -38,13 +41,13 @@ const Legend = React.createClass({
     return (
       <ul className={this.cx()}>
         <li className={this.cx({element: 'LegendItem'})}>
-          {selectedLabel && <span className={this.cx({element: 'LegendItemColor', modifiers: {'selection': true}})} />}
-          {selectedLabel && <span className={this.cx({element: 'LegendItemLabel'})}>{selectedLabel}</span>}
+          <span className={this.cx({element: 'LegendItemColor', modifiers: {'selection': true}})} />
+          <span className={this.cx({element: 'LegendItemLabel'})}>{selectedLabel}</span>
         </li>
         {items}
       </ul>
     );
-  },
-});
+  }
+}
 
 export default Legend;

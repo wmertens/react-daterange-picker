@@ -1,29 +1,29 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import bemCx from './bemCx';
 
+class BemMixin extends React.Component {
+  static propTypes = {
+    bemNamespace: PropTypes.string,
+    bemBlock: PropTypes.string,
+  };
 
-const BemMixin = {
-  propTypes: {
-    bemNamespace: React.PropTypes.string,
-    bemBlock: React.PropTypes.string,
-  },
+  static contextTypes = {
+    bemNamespace: PropTypes.string,
+    bemBlock: PropTypes.string,
+  };
 
-  contextTypes: {
-    bemNamespace: React.PropTypes.string,
-    bemBlock: React.PropTypes.string,
-  },
-
-  childContextTypes: {
-    bemNamespace: React.PropTypes.string,
-    bemBlock: React.PropTypes.string,
-  },
+  static childContextTypes = {
+    bemNamespace: PropTypes.string,
+    bemBlock: PropTypes.string,
+  };
 
   getChildContext() {
     return {
       bemNamespace: this.getBemNamespace(),
       bemBlock: this.getBemBlock(),
     };
-  },
+  }
 
   getBemNamespace() {
     if (this.props.bemNamespace) {
@@ -33,7 +33,7 @@ const BemMixin = {
       return this.context.bemNamespace;
     }
     return null;
-  },
+  }
 
   getBemBlock() {
     if (this.props.bemBlock) {
@@ -43,7 +43,7 @@ const BemMixin = {
       return this.context.bemBlock;
     }
     return null;
-  },
+  }
 
   cx(options = {}) {
     let opts = {
@@ -54,7 +54,7 @@ const BemMixin = {
 
     Object.assign(opts, options);
     return bemCx(opts);
-  },
-};
+  }
+}
 
 export default BemMixin;

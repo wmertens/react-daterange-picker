@@ -3,8 +3,11 @@ import ReactDOM from 'react-dom';
 import TestUtils from 'react-addons-test-utils';
 import CalendarMonth from '../CalendarMonth';
 import CalendarDate from '../CalendarDate';
-import moment from '../../moment-range';
-import _ from 'underscore';
+import Moment from 'moment';
+import {extendMoment} from 'moment-range';
+import _ from 'lodash';
+
+const moment = extendMoment(Moment);
 
 describe('The CalendarMonth Component', function() {
   beforeEach(function() {
@@ -134,7 +137,8 @@ describe('The CalendarMonth Component', function() {
 
       it('which calls props.onMonthChange if props.disableNavigation is false and if the selected value changes', function() {
         var onMonthChange = jasmine.createSpy();
-        this.useDocumentRenderer({ onMonthChange: onMonthChange });
+
+        this.useDocumentRenderer({onMonthChange: onMonthChange});
 
         var select = TestUtils.scryRenderedDOMComponentsWithTag(
           this.renderedComponent,

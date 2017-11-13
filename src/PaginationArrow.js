@@ -1,24 +1,25 @@
 import React from 'react';
+import shallowCompare from 'react-addons-shallow-compare';
+import PropTypes from 'prop-types';
 
 import BemMixin from './utils/BemMixin';
 
-import PureRenderMixin from 'react-addons-pure-render-mixin';
+class PaginationArrow extends BemMixin {
+  static displayName = 'PaginationArrow';
 
+  static propTypes = {
+    disabled: PropTypes.bool,
+    onTrigger: PropTypes.func,
+    direction: PropTypes.oneOf(['next', 'previous']),
+  };
 
-const PaginationArrow = React.createClass({
-  mixins: [BemMixin, PureRenderMixin],
+  static defaultProps = {
+    disabled: false,
+  };
 
-  propTypes: {
-    disabled: React.PropTypes.bool,
-    onTrigger: React.PropTypes.func,
-    direction: React.PropTypes.oneOf(['next', 'previous']),
-  },
-
-  getDefaultProps() {
-    return {
-      disabled: false,
-    };
-  },
+  shouldComponentUpdate(nextProps, nextState) {
+    return shallowCompare(this, nextProps, nextState);
+  }
 
   render() {
     let {disabled, direction, onTrigger, ...props} = this.props;
@@ -41,7 +42,7 @@ const PaginationArrow = React.createClass({
         <div className={this.cx(iconOpts)} />
       </div>
     );
-  },
-});
+  }
+}
 
 export default PaginationArrow;
