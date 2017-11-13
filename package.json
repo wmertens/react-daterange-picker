@@ -1,8 +1,7 @@
 {
-  "name": "nuvi-daterange-picker",
+  "name": "react-daterange-picker",
   "version": "1.2.6",
   "description": "A React based date range picker forked",
-  "author": "Nuvi <developers@nuvi.com> (http://www.nuvi.com)",
   "license": "ISC",
   "scripts": {
     "prepare": "npm run build",
