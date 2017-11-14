@@ -10,6 +10,7 @@ class CalendarDatePeriod extends BemMixin {
   static propTypes = {
     color: PropTypes.string,
     period: PropTypes.string,
+    innerStyle: PropTypes.object,
   };
 
   shouldComponentUpdate(nextProps, nextState) {
@@ -17,16 +18,27 @@ class CalendarDatePeriod extends BemMixin {
   }
 
   render() {
-    let {color, period} = this.props;
+    let {color, period, innerColor} = this.props;
     let modifiers = {[period]: true};
     let style;
+    let innerStyle;
 
     if (color) {
       style = {backgroundColor: color};
     }
 
+    if (innerColor) {
+      innerStyle = {
+        backgroundColor: innerColor,
+        width: '100%',
+        height: '100%',
+      };
+    }
+
     return (
-      <div style={style} className={this.cx({modifiers})} />
+      <div style={style} className={this.cx({modifiers})}>
+        <div style={innerStyle} />
+      </div>
     );
   }
 }

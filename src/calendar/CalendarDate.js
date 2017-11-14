@@ -11,12 +11,12 @@ import CalendarDatePeriod from './CalendarDatePeriod';
 import CalendarHighlight from './CalendarHighlight';
 import CalendarSelection from './CalendarSelection';
 
-
 class CalendarDate extends BemMixin {
   static displayName = 'CalendarDate';
 
   static propTypes = {
     date: CustomPropTypes.moment,
+    styleDate: PropTypes.object,
 
     firstOfMonth: PropTypes.object.isRequired,
 
@@ -95,7 +95,7 @@ class CalendarDate extends BemMixin {
     document.removeEventListener('touchend', this.touchEnd);
   };
 
-  touchStart = (event) => {
+  touchStart = event => {
     event.preventDefault();
     this.setState({
       mouseDown: true,
@@ -119,7 +119,11 @@ class CalendarDate extends BemMixin {
   };
 
   getBemModifiers = () => {
-    let {date, firstOfMonth, isToday: today} = this.props;
+    let {
+      date,
+      firstOfMonth,
+      isToday: today
+    } = this.props;
 
     let otherMonth = false;
     let weekend = false;
@@ -132,7 +136,11 @@ class CalendarDate extends BemMixin {
       weekend = true;
     }
 
-    return {today, weekend, otherMonth};
+    return {
+      today,
+      weekend,
+      otherMonth
+    };
   };
 
   getBemStates = () => {
@@ -146,7 +154,11 @@ class CalendarDate extends BemMixin {
 
     let selected = isSelectedDate || isInSelectedRange || isInHighlightedRange;
 
-    return {disabled, highlighted, selected};
+    return {
+      disabled,
+      highlighted,
+      selected
+    };
   };
 
   render() {
@@ -161,12 +173,12 @@ class CalendarDate extends BemMixin {
       isHighlightedRangeStart,
       isHighlightedRangeEnd,
       isInHighlightedRange,
+      styleDate,
     } = this.props;
 
     let bemModifiers = this.getBemModifiers();
     let bemStates = this.getBemStates();
     let pending = isInHighlightedRange;
-
     let color;
     let amColor;
     let pmColor;
@@ -178,8 +190,11 @@ class CalendarDate extends BemMixin {
     let highlightModifier;
     let selectionModifier;
 
-    if (isSelectedDate || (isSelectedRangeStart && isSelectedRangeEnd)
-        || (isHighlightedRangeStart && isHighlightedRangeEnd)) {
+    if (
+      isSelectedDate ||
+      (isSelectedRangeStart && isSelectedRangeEnd) ||
+      (isHighlightedRangeStart && isHighlightedRangeEnd)
+    ) {
       selectionModifier = 'single';
     } else if (isSelectedRangeStart || isHighlightedRangeStart) {
       selectionModifier = 'start';
@@ -198,14 +213,14 @@ class CalendarDate extends BemMixin {
       color = states.getIn([0, 'color']);
 
       if (color) {
-
-        style = {
-          backgroundColor: color,
-        };
         cellStyle = {
           borderLeftColor: lightenDarkenColor(color, -10),
           borderRightColor: lightenDarkenColor(color, -10),
+          backgroundColor: color,
         };
+        if (styleDate && styleDate.day === date.day()) {
+          style.backgroundColor = styleDate.color;
+        }
       }
     } else {
       amColor = states.getIn([0, 'color']);
@@ -218,28 +233,101 @@ class CalendarDate extends BemMixin {
       if (pmColor) {
         cellStyle.borderRightColor = lightenDarkenColor(pmColor, -10);
       }
+
+      if (styleDate && styleDate.day === date.day()) {
+        style.backgroundColor = styleDate.color;
+      }
     }
 
-    return (
-      <td className={this.cx({element: 'Date', modifiers: bemModifiers, states: bemStates})}
-        style={cellStyle}
-        onTouchStart={this.touchStart}
-        onMouseEnter={this.mouseEnter}
-        onMouseLeave={this.mouseLeave}
-        onMouseDown={this.mouseDown}>
-        {numStates > 1 &&
-          <div className={this.cx({element: "HalfDateStates"})}>
-            <CalendarDatePeriod period="am" color={amColor} />
-            <CalendarDatePeriod period="pm" color={pmColor} />
-          </div>}
-        {numStates === 1 &&
-          <div className={this.cx({element: "FullDateStates"})} style={style} />}
-        <span className={this.cx({element: "DateLabel"})}>{date.format('D')}</span>
-        {selectionModifier ? <CalendarSelection modifier={selectionModifier} pending={pending} /> : null}
-        {highlightModifier ? <CalendarHighlight modifier={highlightModifier} /> : null}
-      </td>
-    );
-  }
+    return ( <
+        td className = {
+          this.cx({
+            element: 'Date',
+            modifiers: bemModifiers,
+            states: bemStates,
+          })
+        }
+        style = {
+          cellStyle
+        }
+        onTouchStart = {
+          this.touchStart
+        }
+        onMouseEnter = {
+          this.mouseEnter
+        }
+        onMouseLeave = {
+          this.mouseLeave
+        }
+        onMouseDown = {
+          this.mouseDown
+        } > {
+          numStates > 1 && ( <
+            div className = {
+              this.cx({
+                element: 'HalfDateStates'
+              })
+            } >
+            <
+            CalendarDatePeriod period = "am"
+            color = {
+              amColor
+            }
+            innerColor = {
+              style.backgroundColor
+            }
+            /> <
+            CalendarDatePeriod period = "pm"
+            color = {
+              pmColor
+            }
+            innerColor = {
+              style.backgroundColor
+            }
+            /> < /
+            div >
+          )
+        } {
+          numStates === 1 && ( <
+            div className = {
+              this.cx({
+                element: 'FullDateStates'
+              })
+            }
+            style = {
+              style
+            }
+            />
+          )
+        } <
+        span className = {
+          this.cx({
+            element: 'DateLabel'
+          })
+        } > {
+          date.format('D')
+        } <
+        /span> {
+        selectionModifier ? ( <
+          CalendarSelection modifier = {
+            selectionModifier
+          }
+          pending = {
+            pending
+          }
+          />
+        ) : null
+      } {
+        highlightModifier ? ( <
+          CalendarHighlight modifier = {
+            highlightModifier
+          }
+          />
+        ) : null
+      } <
+      /td>
+  );
+}
 }
 
 export default CalendarDate;

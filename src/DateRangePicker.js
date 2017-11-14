@@ -57,6 +57,7 @@ class DateRangePicker extends BemMixin {
     singleDateRange: PropTypes.bool,
     showLegend: PropTypes.bool,
     stateDefinitions: PropTypes.object,
+    styleDate: PropTypes.object,
     value: CustomPropTypes.momentOrMomentRange,
   };
 
@@ -505,6 +506,7 @@ class DateRangePicker extends BemMixin {
       numberOfCalendars,
       selectionType,
       value,
+      styleDate,
     } = this.props;
 
     let {
@@ -566,6 +568,7 @@ class DateRangePicker extends BemMixin {
       index,
       key,
       selectionType,
+      styleDate,
       value,
       maxIndex: numberOfCalendars - 1,
       firstOfMonth: monthDate,
