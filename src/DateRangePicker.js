@@ -188,13 +188,17 @@ class DateRangePicker extends BemMixin {
   };
 
   getDateStates = props => {
-    let {dateStates, defaultState, stateDefinitions} = props;
+    let {defaultState, stateDefinitions} = props;
     let actualStates = [];
     let minDate = absoluteMinimum;
     let maxDate = absoluteMaximum;
     let dateCursor = moment(minDate).startOf('day');
 
     let defs = Immutable.fromJS(stateDefinitions);
+
+    let dateStates = props.dateStates.sort(
+      (a, b) => a.range.start - b.range.start
+    );
 
     dateStates.forEach(function(s) {
       let r = s.range;
