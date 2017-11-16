@@ -42,6 +42,10 @@ $ns: DateRangePicker !default;
     text-align: center;
   }
 
+  &__CalendarYear {
+    text-align: center;
+  }
+
   &__PaginationArrow {
     border: 0;
     cursor: pointer;
@@ -140,6 +144,10 @@ $ns: DateRangePicker !default;
     border-spacing: 0 1px;
     margin: 0;
     width: 100%;
+    
+    &--noHover {
+      pointer-events: none;
+    }
   }
 
   &__WeekdayHeading,
