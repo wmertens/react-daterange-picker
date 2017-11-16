@@ -1,5 +1,5 @@
 #!/bin/sh
-BUILDDIR=dist
+BUILDDIR=lib
 
 function die() {
 	echo "!!! $* !!!" >&2

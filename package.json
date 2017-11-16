@@ -10,6 +10,7 @@
     "karma": "karma start karma.conf.js --browsers Firefox --single-run",
     "prepublish": "npm run clean && npm run build",
     "clean": "rimraf lib",
+    "buildGit": "sh git-build.sh",
     "build": "npm run build:lib",
     "build:lib": "babel src/ -d lib"
   },
