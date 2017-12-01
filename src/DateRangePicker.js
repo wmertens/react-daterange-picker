@@ -123,7 +123,7 @@ class DateRangePicker extends BemMixin {
     }
 
     if (initialDate) {
-      month = initialDate.getMonth() - 1;
+      month = initialDate.getMonth();
       year = initialDate.getFullYear();
     }
 
