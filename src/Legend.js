@@ -8,7 +8,6 @@ class Legend extends BemMixin {
   static displayName = 'Legend';
 
   static propTypes = {
-    selectedLabel: PropTypes.string.isRequired,
     stateDefinitions: PropTypes.object.isRequired,
   };
 
@@ -17,12 +16,11 @@ class Legend extends BemMixin {
   }
 
   render() {
-    let {selectedLabel, stateDefinitions} = this.props;
+    let {stateDefinitions} = this.props;
     let items = [];
     let name;
     let def;
     let style;
-
     for (name in stateDefinitions) {
       def = stateDefinitions[name];
       if (def.label && def.color) {
@@ -31,22 +29,19 @@ class Legend extends BemMixin {
         };
         items.push(
           <li className={this.cx({element: 'LegendItem'})} key={name}>
-            <span className={this.cx({element: 'LegendItemColor'})} style={style} />
-            <span className={this.cx({element: 'LegendItemLabel'})}>{def.label}</span>
+            <span
+              className={this.cx({element: 'LegendItemColor'})}
+              style={style}
+            />
+            <span className={this.cx({element: 'LegendItemLabel'})}>
+              {def.label}
+            </span>
           </li>
         );
       }
     }
 
-    return (
-      <ul className={this.cx()}>
-        <li className={this.cx({element: 'LegendItem'})}>
-          <span className={this.cx({element: 'LegendItemColor', modifiers: {'selection': true}})} />
-          <span className={this.cx({element: 'LegendItemLabel'})}>{selectedLabel}</span>
-        </li>
-        {items}
-      </ul>
-    );
+    return <ul className={this.cx()}>{items}</ul>;
   }
 }
 

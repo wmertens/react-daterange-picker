@@ -20,9 +20,7 @@ class CalendarHighlight extends BemMixin {
     let modifiers = {[modifier]: true};
     let states = {};
 
-    return (
-      <div className={this.cx({states, modifiers})} />
-    );
+    return <div className={this.cx({states, modifiers})} />;
   }
 }
 
