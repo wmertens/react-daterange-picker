@@ -228,6 +228,8 @@ class DateRangePicker extends BemMixin {
         state: s.state,
         selectable: def.get('selectable', true),
         color: def.get('color'),
+        fontColor: def.get('fontColor'),
+        hoverFontColor: def.get('hoverFontColor'),
       });
     });
   };
@@ -328,9 +330,9 @@ class DateRangePicker extends BemMixin {
 
     if (selectionType === 'range') {
       if (selectedStartDate) {
-        datePair = Immutable.List
-          .of(selectedStartDate, date)
-          .sortBy(d => d.unix());
+        datePair = Immutable.List.of(selectedStartDate, date).sortBy(d =>
+          d.unix()
+        );
         range = moment.range(datePair.get(0), datePair.get(1));
         forwards = range.start.unix() === selectedStartDate.unix();
         range = this.sanitizeRange(range, forwards);

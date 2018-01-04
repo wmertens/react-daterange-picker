@@ -23,9 +23,7 @@ class CalendarSelection extends BemMixin {
       pending,
     };
 
-    return (
-      <div className={this.cx({states, modifiers})} />
-    );
+    return <div className={this.cx({states, modifiers})} />;
   }
 }
 

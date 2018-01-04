@@ -119,11 +119,7 @@ class CalendarDate extends BemMixin {
   };
 
   getBemModifiers = () => {
-    let {
-      date,
-      firstOfMonth,
-      isToday: today
-    } = this.props;
+    let {date, firstOfMonth, isToday: today} = this.props;
 
     let otherMonth = false;
     let weekend = false;
@@ -139,7 +135,7 @@ class CalendarDate extends BemMixin {
     return {
       today,
       weekend,
-      otherMonth
+      otherMonth,
     };
   };
 
@@ -157,7 +153,7 @@ class CalendarDate extends BemMixin {
     return {
       disabled,
       highlighted,
-      selected
+      selected,
     };
   };
 
@@ -186,6 +182,7 @@ class CalendarDate extends BemMixin {
     let numStates = states.count();
     let cellStyle = {};
     let style = {};
+    let highlightStyle = {};
 
     let highlightModifier;
     let selectionModifier;
@@ -239,95 +236,72 @@ class CalendarDate extends BemMixin {
       }
     }
 
-    return ( <
-        td className = {
-          this.cx({
-            element: 'Date',
-            modifiers: bemModifiers,
-            states: bemStates,
-          })
-        }
-        style = {
-          cellStyle
-        }
-        onTouchStart = {
-          this.touchStart
-        }
-        onMouseEnter = {
-          this.mouseEnter
-        }
-        onMouseLeave = {
-          this.mouseLeave
-        }
-        onMouseDown = {
-          this.mouseDown
-        } > {
-          numStates > 1 && ( <
-            div className = {
-              this.cx({
-                element: 'HalfDateStates'
-              })
-            } >
-            <
-            CalendarDatePeriod period = "am"
-            color = {
-              amColor
-            }
-            innerColor = {
-              style.backgroundColor
-            }
-            /> <
-            CalendarDatePeriod period = "pm"
-            color = {
-              pmColor
-            }
-            innerColor = {
-              style.backgroundColor
-            }
-            /> < /
-            div >
-          )
-        } {
-          numStates === 1 && ( <
-            div className = {
-              this.cx({
-                element: 'FullDateStates'
-              })
-            }
-            style = {
-              style
-            }
+    const fontColor = states.getIn([0, 'fontColor']);
+    const hoverFontColor = states.getIn([0, 'hoverFontColor']);
+
+    if (fontColor) {
+      cellStyle.color = states.getIn([0, 'fontColor']);
+    }
+
+    if (highlightModifier && hoverFontColor) {
+      cellStyle.color = states.getIn([0, 'hoverFontColor']);
+    }
+
+    return (
+      <td
+        className={this.cx({
+          element: 'Date',
+          modifiers: bemModifiers,
+          states: bemStates,
+        })}
+        style={cellStyle}
+        onTouchStart={this.touchStart}
+        onMouseEnter={this.mouseEnter}
+        onMouseLeave={this.mouseLeave}
+        onMouseDown={this.mouseDown}
+      >
+        {numStates > 1 && (
+          <div
+            className={this.cx({
+              element: 'HalfDateStates',
+            })}
+          >
+            <CalendarDatePeriod
+              period="am"
+              color={amColor}
+              innerColor={style.backgroundColor}
             />
-          )
-        } <
-        span className = {
-          this.cx({
-            element: 'DateLabel'
-          })
-        } > {
-          date.format('D')
-        } <
-        /span> {
-        selectionModifier ? ( <
-          CalendarSelection modifier = {
-            selectionModifier
-          }
-          pending = {
-            pending
-          }
+            <CalendarDatePeriod
+              period="pm"
+              color={pmColor}
+              innerColor={style.backgroundColor}
+            />
+          </div>
+        )}
+        {numStates === 1 && (
+          <div
+            className={this.cx({
+              element: 'FullDateStates',
+            })}
+            style={style}
           />
-        ) : null
-      } {
-        highlightModifier ? ( <
-          CalendarHighlight modifier = {
-            highlightModifier
-          }
-          />
-        ) : null
-      } <
-      /td>
-  );
-}
+        )}
+        <span
+          className={this.cx({
+            element: 'DateLabel',
+          })}
+        >
+          {date.format('D')}
+        </span>
+        {selectionModifier ? (
+          <CalendarSelection modifier={selectionModifier} pending={pending} />
+        ) : null}
+        {highlightModifier ? (
+          <CalendarHighlight modifier={highlightModifier} />
+        ) : null}
+      </td>
+    );
+  }
 }
 
 export default CalendarDate;
