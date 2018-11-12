@@ -4,7 +4,6 @@
   "description": "A React based date range picker forked",
   "license": "ISC",
   "scripts": {
-    "prepare": "npm run build",
     "test": "npm run lint && npm run karma",
     "lint": "eslint src",
     "karma": "karma start karma.conf.js --browsers Firefox --single-run",
