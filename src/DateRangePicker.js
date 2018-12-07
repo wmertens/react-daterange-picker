@@ -416,7 +416,10 @@ class DateRangePicker extends BemMixin {
   isStartOrEndVisible = props => {
     const {value, selectionType, numberOfCalendars} = props;
 
+    if (!value) return true;
+
     const isVisible = date => {
+      if (!date) return true;
       const yearMonth = getYearMonth(date);
       const isSameYear = yearMonth.year === this.state.year;
       const isMonthVisible =
