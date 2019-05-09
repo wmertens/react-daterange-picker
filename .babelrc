@@ -1,6 +1,6 @@
 {
-  "presets": ["react", "stage-1", "es2015"],
-  "plugins": ["transform-object-assign", "transform-class-properties", "transform-runtime"],
+  "presets": ["@babel/env", "@babel/react"],
+  "plugins": ["@babel/proposal-class-properties"],
   "env": {
     "test": {
       "plugins": [
