@@ -79,7 +79,8 @@ class CalendarDate extends BemMixin {
     document.addEventListener('mouseup', this.mouseUp);
   };
 
-  touchEnd = () => {
+  touchEnd = (event) => {
+    event.preventDefault();
     this.props.onHighlightDate(this.props.date);
     this.props.onSelectDate(this.props.date);
 
@@ -95,7 +96,7 @@ class CalendarDate extends BemMixin {
     document.removeEventListener('touchend', this.touchEnd);
   };
 
-  touchStart = event => {
+  touchStart = (event) => {
     event.preventDefault();
     this.setState({
       mouseDown: true,
